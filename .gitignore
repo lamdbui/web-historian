@@ -1,5 +1,7 @@
 archives/*
 archives/*.txt
+web/archives/*
+web/archives/*.txt
 test/testdata/sites/*
 test/testdata/sites.txt
 
