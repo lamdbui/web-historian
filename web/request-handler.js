@@ -19,6 +19,27 @@ exports.handleRequest = function (req, res) {
       fs.access(`${archive.paths.siteAssets}/${basename}`, fs.constants.F_OK, (err) => {
         if (err) {
           fs.access(`${archive.paths.archivedSites}/${basename}`, fs.constants.F_OK, (err) => {
+
+            archive.isUrlInList(basename, function(result){
+              if (result) {
+                archive.isUrlArchived(basename, function(result){
+                  if (result) {
+                    headers['Content-Type'] = 'text/html';
+                    httphelper.serveAssets(res, `${archive.paths.archivedSites}/${basename}`);
+                  } else {
+                    headers['Content-Type'] = 'text/html';
+                    httphelper.serveAssets(res, `${archive.paths.siteAssets}/loading.html`);
+                  }
+                });
+              } else {
+                archive.addUrlToList(basename, function(){
+                  console.log(basename + "added to archives/sites.txt");
+                });
+                headers['Content-Type'] = 'text/html';
+                httphelper.serveAssets(res, `${archive.paths.siteAssets}/loading.html`);
+              }
+            });
+
             if (err) {
               console.log('ERROR: problem reading file -', basename);
               res.writeHeader(404, headers);
