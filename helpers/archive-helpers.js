@@ -37,19 +37,13 @@ exports.readListOfUrls = function(callback) {
 };
 
 exports.isUrlInList = function(url, callback) {
-  fs.readFile(this.paths.list, (err, data) => {
-    if (err) {
-      console.log('sadness');
-    } else {
-      console.log('happiness cow');
-      callback(data.toString().includes(url));
-      // includes
-    }
+  this.readListOfUrls(data => {
+    return data.includes(url);
   });
-
 };
 
 exports.addUrlToList = function(url, callback) {
+  // fs.writeFile(this.paths.list, url, );
 };
 
 exports.isUrlArchived = function(url, callback) {
