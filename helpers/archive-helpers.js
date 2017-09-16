@@ -37,8 +37,8 @@ exports.readListOfUrls = function(callback) {
 };
 
 exports.isUrlInList = function(url, callback) {
-  this.readListOfUrls(data => {
-    callback(data.indexOf(url) !== -1);
+  this.readListOfUrls(dataArray => {
+    callback(dataArray.indexOf(url) !== -1);
   });
 };
 
@@ -49,6 +49,9 @@ exports.addUrlToList = function(url, callback) {
 };
 
 exports.isUrlArchived = function(url, callback) {
+  fs.stat(`${this.paths.archivedSites}/${url}`, (err, stats) => {
+    callback(!err);
+  });
 };
 
 exports.downloadUrls = function(urls) {
