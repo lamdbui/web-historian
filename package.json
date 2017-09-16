@@ -20,6 +20,8 @@
     "bluebird": "^3.3.4",
     "cron": "^1.1.0",
     "mime-types": "^2.1.17",
+    "node-inspector": "^1.1.1",
+    "nodemon": "^1.12.1",
     "request": "^2.70.0",
     "underscore": "^1.8.3"
   },

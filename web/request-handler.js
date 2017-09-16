@@ -25,21 +25,61 @@ exports.handleRequest = function (req, res) {
         }
       });
     } else {
-      let basePath = archive.paths.siteAssets;
-      console.log('PATH:', `${basePath}/${basename}`);
-      fs.readFile(`${basePath}/${basename}`, (err, data) => {
+      // let basePath = archive.paths.siteAssets;
+      // console.log('PATH:', `${basePath}/${basename}`);
+
+      fs.access(`${archive.paths.siteAssets}/${basename}`, fs.constants.F_OK, (err) => {
         if (err) {
-          console.log('ERROR: problem reading file -', basename);
-          res.writeHeader(404, headers);
-          res.end(data);
+          fs.access(`${archive.paths.archivedSites}/${basename}`, fs.constants.F_OK, (err) => {
+            if (err) {
+              console.log('ERROR: problem reading file -', basename);
+              res.writeHeader(404, headers);
+              res.end();
+            } else {
+              fs.readFile(`${archive.paths.archivedSites}/${basename}`, (err, data) => {
+                if (err) {
+                  console.log('ERROR: problem reading file -', basename);
+                  res.writeHeader(404, headers);
+                  res.end(data);
+                } else {
+                  // headers['Content-Type'] = mimetypes.lookup(basename);
+                  headers['Content-Type'] = 'text/html';
+                  res.writeHeader(200, headers);
+                  res.end(data);
+                }
+              });
+            }
+          });
         } else {
-          headers['Content-Type'] = mimetypes.lookup(basename);
-          res.writeHeader(200, headers);
-          res.end(data);
+          fs.readFile(`${archive.paths.siteAssets}/${basename}`, (err, data) => {
+            if (err) {
+              console.log('ERROR: problem reading file -', basename);
+              res.writeHeader(404, headers);
+              res.end(data);
+            } else {
+              headers['Content-Type'] = mimetypes.lookup(basename);
+              res.writeHeader(200, headers);
+              res.end(data);
+            }
+          });
+
         }
       });
+
+      // fs.readFile(`${basePath}/${basename}`, (err, data) => {
+      //   if (err) {
+      //     console.log('ERROR: problem reading file -', basename);
+      //     res.writeHeader(404, headers);
+      //     res.end(data);
+      //   } else {
+      //     headers['Content-Type'] = mimetypes.lookup(basename);
+      //     res.writeHeader(200, headers);
+      //     res.end(data);
+      //   }
+      // });
     }
   }
 
+// fs.access('./package.json', fs.constants.F_OK, function(err){console.log(!err)})
   // res.end(archive.paths.list);
 };
