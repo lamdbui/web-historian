@@ -31,14 +31,14 @@ exports.readListOfUrls = function(callback) {
       console.log('sadness');
     } else {
       console.log('happiness cow');
-      callback(data.toString());
+      callback(data.toString().split('\n'));
     }
   });
 };
 
 exports.isUrlInList = function(url, callback) {
   this.readListOfUrls(data => {
-    return data.includes(url);
+    callback(data.indexOf(url) !== -1);
   });
 };
 
