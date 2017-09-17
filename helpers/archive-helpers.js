@@ -29,6 +29,7 @@ exports.readListOfUrls = function(callback) {
   fs.readFile(this.paths.list, (err, data) => {
     if (err) {
       console.log('sadness');
+      callback([]);
     } else {
       console.log('happiness cow');
       callback(data.toString().split('\n'));
@@ -43,7 +44,7 @@ exports.isUrlInList = function(url, callback) {
 };
 
 exports.addUrlToList = function(url, callback) {
-  fs.writeFile(this.paths.list, url, err => {
+  fs.appendFile(this.paths.list, url + '\n', err => {
     callback();
   });
 };
